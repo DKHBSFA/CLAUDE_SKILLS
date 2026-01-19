@@ -10,7 +10,10 @@ Due componenti che lavorano insieme:
 
 1. **Framework operativo** (`CLAUDE.md` + `.claude/docs/`) — Regole di processo: investigare prima di implementare, tracciare decisioni, verificare prima di affermare.
 
-2. **Skill UX-Craft** (`.claude/skills/ux-craft/`) — Conoscenza specializzata per UI/UX: design direction, accessibilità WCAG, tipografia, validazione.
+2. **Skill specializzate** (`.claude/skills/`) — Conoscenza di dominio:
+   - **ux-craft** — UI/UX: design direction, accessibilità WCAG, tipografia
+   - **dev-patterns** — Development: principi SOLID, API design, testing, security (agnostico + stack-specific)
+   - **security-guardian** — Sicurezza AI-specific: OWASP, credential detection, BaaS audit
 
 Il framework definisce *come* Claude lavora. Le skill definiscono *cosa* sa fare in ambiti specifici.
 
@@ -37,6 +40,23 @@ progetto/
         │   │   ├── pages.md
         │   │   └── elements.md
         │   └── references/   # Screenshot di riferimento (da popolare)
+        ├── dev-patterns/     # Skill development patterns
+        │   ├── SKILL.md      # Entry point + /adapt-framework
+        │   ├── core/         # Pattern agnostici (sempre presenti)
+        │   │   ├── principles.md
+        │   │   ├── api-design.md
+        │   │   ├── testing.md
+        │   │   ├── security.md
+        │   │   ├── error-handling.md
+        │   │   └── caching.md
+        │   ├── checklists/   # Checklist universali
+        │   │   ├── code-review.md
+        │   │   ├── pre-deploy.md
+        │   │   └── refactoring.md
+        │   ├── templates/    # Template per generazione
+        │   │   └── stack-template.md
+        │   └── stacks/       # Pattern stack-specific (generati)
+        │       └── typescript-react-nextjs/  # Esempio pre-generato
         └── security-guardian/# Skill sicurezza AI-specific
 ```
 
@@ -140,6 +160,29 @@ Si attiva automaticamente quando il contesto riguarda UI/UX, oppure manualmente:
 **Visual References System:** La skill include un sistema di riferimenti visivi per mantenere consistenza nel design. Aggiungi screenshot in `.claude/skills/ux-craft/references/` e mappali nei file taxonomy per far consultare a Claude esempi visivi curati invece di cercare online.
 
 **Attivazione:** UI, UX, component, interface, design system, accessibility, WCAG, frontend styling
+
+#### Dev Patterns
+
+Framework di sviluppo agnostico con pattern core universali e generazione dinamica di pattern stack-specific.
+
+| Comando | Cosa fa |
+|---------|---------|
+| `/adapt-framework` | Analizza il progetto e genera pattern per lo stack rilevato |
+| `/dev-patterns principles` | Consulta principi SOLID, DRY, KISS |
+| `/dev-patterns api` | REST/GraphQL design patterns |
+| `/dev-patterns testing` | TDD, coverage, mocking |
+| `/dev-patterns security` | Checklist sicurezza |
+| `/dev-patterns stack` | Pattern specifici del tuo stack |
+| `/dev-patterns review` | Code review con checklist |
+| `/dev-patterns checklist [type]` | Carica checklist (pre-deploy, refactoring) |
+
+**Architettura a due livelli:**
+1. **Core agnostico** — Principi universali sempre disponibili (SOLID, API design, testing, security, error handling, caching)
+2. **Stack-specific** — Pattern generati dinamicamente per il tuo stack (TypeScript+React+Next.js, Python+FastAPI, etc.)
+
+**Attivazione:**
+- Automatica quando crei un nuovo progetto (Claude genera i pattern dopo aver scelto lo stack)
+- Manuale con `/adapt-framework` su progetti esistenti
 
 #### Security Guardian
 

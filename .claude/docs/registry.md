@@ -1,6 +1,6 @@
 # Codebase Registry
 
-**Last updated:** 2026-01-17
+**Last updated:** [DATA]
 
 This is my memory. I update it as I learn. I check it before making claims.
 
@@ -12,66 +12,7 @@ This is my memory. I update it as I learn. I check it before making claims.
 |------|----------|---------|
 | ux-craft | `.claude/skills/ux-craft/` | UI/UX development with distinctive design, accessibility, systematic enforcement |
 | security-guardian | `.claude/skills/security-guardian/` | AI-specific security analysis for vibe coding vulnerabilities, OWASP Top 10, secrets, BaaS misconfigs |
-
-### ux-craft Skill Structure
-
-| File | Purpose |
-|------|---------|
-| `SKILL.md` | Core skill definition, workflow, commands |
-| `directions.md` | 6 Design Directions with tokens and examples |
-| `accessibility.md` | WCAG 2.2 AA/AAA compliance checklist |
-| `typography.md` | Font stacks, scales, international support |
-| `validation.md` | Pre/during/post generation validation rules |
-| `examples/system-*.md` | Template design systems by direction |
-
-### ux-craft Commands
-
-| Command | Action |
-|---------|--------|
-| `/ux-craft establish` | Create system.md via direction selection |
-| `/ux-craft apply` | Load system.md, enforce during generation |
-| `/ux-craft audit` | Run validation checklist |
-| `/ux-craft research [topic]` | Research-first workflow |
-| `/ux-craft polish` | Apply "雕花" refinement |
-| `/ux-craft extract [name]` | Save pattern to library |
-| `/ux-craft compliance` | Audit and track design system compliance across codebase |
-| `/ux-craft migrate [pattern]` | Systematically migrate pattern with tracking |
-
-### security-guardian Skill Structure
-
-| File | Purpose |
-|------|---------|
-| `SKILL.md` | Core skill definition, commands, detection patterns |
-| `patterns/owasp-top-10.json` | 60+ OWASP vulnerability patterns |
-| `patterns/secrets.json` | 40+ credential detection patterns |
-| `patterns/baas-misconfig.json` | Supabase, Firebase, Amplify, PocketBase patterns |
-| `scripts/scanner.py` | Core security scanning engine |
-| `scripts/secret-detector.py` | Specialized secret detection |
-| `scripts/baas-auditor.py` | BaaS configuration auditor |
-| `scripts/iteration-tracker.py` | AI iteration tracking per file |
-| `hooks/pre-tool-validator.py` | PreToolUse hook - blocks critical vulns |
-| `hooks/post-tool-scanner.py` | PostToolUse hook - scans and logs |
-| `reference/owasp-guide.md` | OWASP Top 10 quick reference |
-| `reference/secure-patterns.md` | Secure coding patterns |
-
-### security-guardian Commands
-
-| Command | Action |
-|---------|--------|
-| `/security-guardian scan [path]` | Scan file/directory for vulnerabilities |
-| `/security-guardian audit` | Full project security audit |
-| `/security-guardian secrets` | Focused credential scan |
-| `/security-guardian baas [provider]` | BaaS configuration audit |
-| `/security-guardian status` | Show iteration tracking status |
-| `/security-guardian report [format]` | Generate SARIF/markdown/JSON report |
-
-### security-guardian Research Basis
-
-| Source | Finding |
-|--------|---------|
-| arXiv:2506.11022 | +37.6% critical vulns after 5 AI iterations |
-| Escape.tech 2025 | 2,000+ vulns in 5,600 vibe-coded apps |
-| CVE-2025-54794/54795 | Claude Code path traversal & command injection |
+| dev-patterns | `.claude/skills/dev-patterns/` | Development patterns and best practices. Agnostic core with dynamic stack-specific pattern generation |
 
 ---
 
@@ -79,6 +20,7 @@ This is my memory. I update it as I learn. I check it before making claims.
 
 | Name | Type | Location | Purpose |
 |------|------|----------|---------|
+| | | | |
 
 ---
 
@@ -86,6 +28,7 @@ This is my memory. I update it as I learn. I check it before making claims.
 
 | Function | Location | Lines | What it does |
 |----------|----------|-------|--------------|
+| | | | |
 
 ---
 
@@ -93,6 +36,7 @@ This is my memory. I update it as I learn. I check it before making claims.
 
 | Method | Route | Handler | Auth required |
 |--------|-------|---------|---------------|
+| | | | |
 
 ---
 
@@ -101,14 +45,18 @@ This is my memory. I update it as I learn. I check it before making claims.
 ### Tables
 | Table | Key columns | Used by |
 |-------|-------------|---------|
+| | | |
 
 ### Important queries
 | Name | Location | What it does |
 |------|----------|--------------|
+| | | |
 
 ---
 
 ## Data Flows
+
+*Document important data flows here.*
 
 ---
 
@@ -116,6 +64,7 @@ This is my memory. I update it as I learn. I check it before making claims.
 
 | Package | Version | Used for |
 |---------|---------|----------|
+| | | |
 
 ---
 
@@ -123,6 +72,7 @@ This is my memory. I update it as I learn. I check it before making claims.
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
+| | | |
 
 ---
 
