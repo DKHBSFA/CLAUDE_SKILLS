@@ -130,19 +130,48 @@ From a screenshot, Claude can identify:
 
 ```
 1. /ux-craft establish
+   └── Checks references/ folder
+   └── If references exist → analyzes for direction
+   └── If empty → asks project type, decides autonomously
    └── Creates system.md with exact tokens
 
-2. /ux-craft reference [pattern]  ← NEW
-   └── Shows visual inspiration
+2. /ux-craft reference [pattern]
+   └── Shows visual inspiration from taxonomy
 
-3. BUILD
+3. /ux-craft test-system
+   └── Generates static HTML test pages
+   └── Review in browser before adoption
+
+4. BUILD
    └── Generates code using:
        • Exact values from system.md
        • Visual style from references
+       • Page archetype from taxonomy
 
-4. /ux-craft audit
+5. /ux-craft audit
    └── Verifies consistency
 ```
+
+---
+
+## No References? No Problem
+
+If the `references/` folder is empty, `/ux-craft establish` uses intelligent fallback:
+
+1. Asks for project type (SaaS, e-commerce, docs, etc.)
+2. Infers best design direction based on industry best practices
+3. Recommends direction with reasoning
+
+| Project Type | Auto-Selected Direction |
+|--------------|------------------------|
+| SaaS / B2B | Sophistication & Trust |
+| E-commerce | Warmth & Approachability |
+| Developer tools | Utility & Function |
+| Admin / Dashboard | Precision & Density |
+| Analytics / BI | Data & Analysis |
+| Creative / Portfolio | Expressive & Bold |
+
+You can always override the recommendation.
 
 ---
 

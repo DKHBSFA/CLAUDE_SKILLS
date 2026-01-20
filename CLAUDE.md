@@ -64,6 +64,7 @@ Skip sections that don't apply.
 | `registry.md` | Dynamic | Yes — map of THIS project |
 | `decisions.md` | Dynamic | Yes — decisions for THIS project |
 | `checklist.md` | Semi-static | Partly — base + project-specific |
+| `workflows.md` | Static | No — decision flowcharts, same everywhere |
 | `specs/*.md` | Dynamic | Yes — created during development |
 | `skills/*` | Static | No — same capabilities everywhere |
 
@@ -207,6 +208,7 @@ These are the ways I break. The framework guards against them.
 |--------------|---------|
 | Understand codebase structure | Read `.claude/docs/registry.md` |
 | Find where something lives | `grep "name" .claude/docs/registry.md` |
+| Understand decision flows | Read `.claude/docs/workflows.md` |
 | Start a new feature | Create spec → wait for PROCEED |
 | Track my progress | Use TodoWrite |
 | Record why I chose X over Y | Add to `.claude/docs/decisions.md` |
@@ -225,6 +227,7 @@ CLAUDE.md           # This file - my operating system
 │   ├── registry.md     # What I know about the codebase
 │   ├── decisions.md    # Why things are the way they are
 │   ├── checklist.md    # Pre-commit verification
+│   ├── workflows.md    # Decision flowcharts (Mermaid)
 │   └── specs/          # Feature specifications
 │       └── [name].md
 └── skills/             # Specialized skills

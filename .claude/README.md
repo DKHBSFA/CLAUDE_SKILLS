@@ -30,6 +30,7 @@ progetto/
     │   ├── registry.md       # Memoria: cosa Claude sa del codebase
     │   ├── decisions.md      # Decisioni architetturali e perché
     │   ├── checklist.md      # Verifica pre-commit
+    │   ├── workflows.md      # Diagrammi di flusso decisionali (Mermaid)
     │   └── specs/            # Specifiche feature (prima di implementare)
     └── skills/
         ├── ux-craft/         # Skill UI/UX
@@ -106,6 +107,7 @@ Aggiungi le decisioni rilevanti a .claude/docs/decisions.md.
 | `registry.md` | **Obbligatorio** | Subito dopo aver copiato il framework |
 | `decisions.md` | Consigliato | Se ci sono pattern già stabiliti |
 | `checklist.md` | Opzionale | Se ci sono check specifici del progetto |
+| `workflows.md` | No | Diagrammi universali, non modificare |
 | `specs/*.md` | Automatico | Claude li crea durante lo sviluppo |
 
 ### Cosa NON va modificato
@@ -113,6 +115,7 @@ Aggiungi le decisioni rilevanti a .claude/docs/decisions.md.
 | File | Perché |
 |------|--------|
 | `CLAUDE.md` | È il "sistema operativo" — uguale per tutti i progetti |
+| `workflows.md` | Diagrammi di flusso universali — uguale per tutti i progetti |
 | `skills/*` | Le skill sono generiche, non dipendono dal progetto |
 
 ---
@@ -126,6 +129,7 @@ Aggiungi le decisioni rilevanti a .claude/docs/decisions.md.
 2. **Prima di lavorare**, Claude consulta:
    - `.claude/docs/registry.md` — Cosa esiste già?
    - `.claude/docs/decisions.md` — Decisioni passate da rispettare?
+   - `.claude/docs/workflows.md` — Diagrammi di flusso per decisioni complesse
 
 3. **Per modifiche non banali**, Claude:
    - Crea una spec in `.claude/docs/specs/[nome].md`
@@ -137,6 +141,21 @@ Aggiungi le decisioni rilevanti a .claude/docs/decisions.md.
    - Registra decisioni architetturali rilevanti
    - Esegue la checklist pre-commit
 
+### Workflow Diagrams
+
+Il file `.claude/docs/workflows.md` contiene diagrammi Mermaid che visualizzano i flussi decisionali del framework:
+
+| Workflow | Quando consultare |
+|----------|-------------------|
+| Change Classification | Per decidere se serve una spec |
+| Registry Verification | Prima di affermare che qualcosa esiste |
+| Pre-Generation (UX) | Prima di generare codice UI |
+| Severity Enforcement | Quando security-guardian trova vulnerabilità |
+| Iteration Tracking | Quando modifico lo stesso file ripetutamente |
+| Pre-Commit Checklist | Prima di ogni commit |
+
+I diagrammi rendono esplicita la logica condizionale che altrimenti sarebbe sparsa nelle skill in forma testuale.
+
 ### Skills
 
 Le skill sono moduli di conoscenza specializzata che Claude può attivare in base al contesto.
@@ -147,7 +166,7 @@ Si attiva automaticamente quando il contesto riguarda UI/UX, oppure manualmente:
 
 | Comando | Cosa fa |
 |---------|---------|
-| `/ux-craft establish` | Crea un design system scegliendo una direzione |
+| `/ux-craft establish` | Crea un design system (con fallback intelligente se nessuna reference) |
 | `/ux-craft apply` | Applica il design system durante la generazione |
 | `/ux-craft audit` | Verifica accessibilità e coerenza |
 | `/ux-craft research [topic]` | Ricerca prima di progettare |
@@ -156,8 +175,15 @@ Si attiva automaticamente quando il contesto riguarda UI/UX, oppure manualmente:
 | `/ux-craft reference [pattern]` | Consulta riferimenti visivi curati |
 | `/ux-craft compliance` | Audit compliance design system su tutto il codebase |
 | `/ux-craft migrate [pattern]` | Migrazione sistematica di un pattern |
+| `/ux-craft test-system` | Genera pagine HTML statiche per testare il design system |
+| `/ux-craft map-sitemap` | Mappa route progetto → archetipi pagina |
+| `/ux-craft archetype [type]` | Genera template completo per un archetipo |
 
-**Visual References System:** La skill include un sistema di riferimenti visivi per mantenere consistenza nel design. Aggiungi screenshot in `.claude/skills/ux-craft/references/` e mappali nei file taxonomy per far consultare a Claude esempi visivi curati invece di cercare online.
+**Page Taxonomy System:** La skill include una tassonomia di 6 archetipi pagina (Entry, Discovery, Detail, Action, Management, System). Ogni archetipo definisce layout patterns, component slots, content patterns e interaction flows. Usa `/ux-craft map-sitemap` per mappare le route del tuo progetto agli archetipi.
+
+**Design System Testing:** Prima di adottare un design system, usa `/ux-craft test-system` per generare pagine HTML statiche di test in `.ux-craft/test-pages/`. Questo permette di validare visivamente il sistema prima dell'integrazione.
+
+**Visual References System:** La skill include un sistema di riferimenti visivi per mantenere consistenza nel design. Aggiungi screenshot in `.claude/skills/ux-craft/references/` e mappali nei file taxonomy per far consultare a Claude esempi visivi curati invece di cercare online. Se la cartella references è vuota, `/ux-craft establish` decide autonomamente in base al tipo di progetto.
 
 **Attivazione:** UI, UX, component, interface, design system, accessibility, WCAG, frontend styling
 

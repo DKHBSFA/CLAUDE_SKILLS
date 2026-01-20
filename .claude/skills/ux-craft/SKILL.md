@@ -84,12 +84,36 @@ Apply obsessive visual refinement:
 
 ### `/ux-craft establish`
 
-Creates `system.md` design system file:
+Creates `system.md` design system file with intelligent fallback:
 
-1. Ask user to select Design Direction (see [directions.md](directions.md))
-2. Ask for color foundation (warm/cool/neutral)
-3. Generate `system.md` with complete token system
-4. Store in `.ux-craft/system.md`
+1. **Check references folder** (`.claude/skills/ux-craft/references/`)
+2. **If references exist:**
+   - Analyze visual patterns from screenshots
+   - Extract design direction from references
+   - Suggest direction based on analysis
+3. **If references empty:**
+   - Ask project type (SaaS, e-commerce, docs, dashboard, creative, etc.)
+   - Infer best design direction based on:
+     - Industry best practices
+     - Similar successful products
+     - Project type conventions
+   - Recommend direction with reasoning
+4. Ask for color foundation (warm/cool/neutral)
+5. Generate `system.md` with complete token system
+6. Store in `.ux-craft/system.md`
+
+**Project Type → Direction Mapping:**
+
+| Project Type | Recommended Direction |
+|--------------|----------------------|
+| SaaS / B2B | Sophistication & Trust |
+| E-commerce | Warmth & Approachability |
+| Developer tools | Utility & Function |
+| Admin / Dashboard | Precision & Density |
+| Analytics / BI | Data & Analysis |
+| Creative / Portfolio | Expressive & Bold |
+| Documentation | Utility & Function |
+| Consumer app | Warmth & Approachability |
 
 ### `/ux-craft apply`
 
@@ -201,6 +225,91 @@ Consult curated visual references before generating UI:
 **Note:** References provide stylistic inspiration, not pixel-perfect specs. For exact values, use `system.md` tokens.
 
 See [references.md](references.md) for full documentation.
+
+### `/ux-craft test-system`
+
+Generate static HTML test pages to validate design system before adoption:
+
+1. Check if `.ux-craft/system.md` exists
+2. If not → prompt to run `/ux-craft establish` first
+3. Create `.ux-craft/test-pages/` folder
+4. Generate test pages for each archetype:
+   - `index.html` - Links to all test pages
+   - `tokens.css` - CSS custom properties from system.md
+   - `entry.html` - Entry/Landing page components
+   - `discovery.html` - Search/Listing components
+   - `detail.html` - Detail page components
+   - `action.html` - Form/Action components
+   - `management.html` - Table/Management components
+   - `system.html` - Error/System state components
+5. Each page includes:
+   - All relevant components for that archetype
+   - Multiple states (default, hover, focus, error, loading)
+   - Responsive breakpoints demo
+   - Light/dark mode toggle (if system supports)
+6. Provide command to serve locally: `python -m http.server 8080`
+
+**Output:** `.ux-craft/test-pages/` with 7 HTML files + shared CSS
+
+**Usage:**
+```
+/ux-craft test-system
+```
+
+Then open `http://localhost:8080` to review.
+
+### `/ux-craft map-sitemap`
+
+Connect project routes to page taxonomy archetypes:
+
+1. Ask user for sitemap (list of routes/pages)
+2. For each route, suggest archetype classification:
+   - Entry, Discovery, Detail, Action, Management, or System
+3. Identify hybrid pages (multiple archetypes)
+4. Create `.ux-craft/sitemap-mapping.md` with:
+   - Route → Archetype mapping table
+   - Shared layout patterns
+   - Special considerations per page
+
+**Example output:**
+```markdown
+# Sitemap Mapping
+
+| Route | Archetype | Notes |
+|-------|-----------|-------|
+| `/` | Entry | Hero-centric landing |
+| `/products` | Discovery | Sidebar + grid layout |
+| `/products/:id` | Detail | Media + info split |
+| `/checkout` | Action | Stepped wizard |
+| `/admin/users` | Management | Data table |
+| `/404` | System | Centered minimal |
+
+## Hybrid Pages
+- `/dashboard` → Management (primary) + System (empty states)
+```
+
+**Usage:**
+```
+/ux-craft map-sitemap
+```
+
+### `/ux-craft archetype [type]`
+
+Generate a complete page template for a specific archetype:
+
+1. Read taxonomy definition from [taxonomy/pages.md](taxonomy/pages.md)
+2. Load `system.md` tokens
+3. Generate semantic HTML structure with all component slots
+4. Apply styling from design system
+5. Include placeholder content appropriate to archetype
+6. Add accessibility attributes
+
+**Types:** `entry`, `discovery`, `detail`, `action`, `management`, `system`
+
+**Usage:**
+```
+/ux-craft archetype discovery
+```
 
 ---
 
@@ -317,10 +426,20 @@ Tracks in-progress pattern migrations. Created by `/ux-craft migrate`.
 .ux-craft/
 ├── system.md           # Design tokens
 ├── compliance.md       # File compliance status
+├── sitemap-mapping.md  # Route → archetype mapping
 ├── migrations/         # Active migrations
 │   ├── transition-colors.md
 │   └── spacing-variables.md
-└── patterns/           # Extracted patterns
+├── patterns/           # Extracted patterns
+└── test-pages/         # Static HTML test pages
+    ├── index.html
+    ├── tokens.css
+    ├── entry.html
+    ├── discovery.html
+    ├── detail.html
+    ├── action.html
+    ├── management.html
+    └── system.html
 ```
 
 ---

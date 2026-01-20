@@ -1,6 +1,6 @@
 # Codebase Registry
 
-**Last updated:** [DATA]
+**Last updated:** [DATE]
 
 This is my memory. I update it as I learn. I check it before making claims.
 
