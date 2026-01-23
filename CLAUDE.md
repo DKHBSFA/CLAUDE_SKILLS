@@ -56,6 +56,46 @@ Skip sections that don't apply.
 
 ---
 
+## First Use on Existing UI Project
+
+When copying this framework to a project with existing UI components:
+
+1. **Establish design system**
+   ```
+   /ux-craft establish
+   ```
+   Creates `.ux-craft/system.md` with design tokens. If the project already has a design system, import those values.
+
+2. **Analyze current UI state**
+   ```
+   /ux-craft analyze-project
+   ```
+   Scans codebase and creates `.ux-craft/project-map.md` with:
+   - Pages mapped to archetypes (Entry, Discovery, Detail, Action, Management, System)
+   - Elements inventory per page
+   - Design system compliance status
+   - Violations and migration priorities
+
+3. **Review the project map**
+   - Check `.ux-craft/project-map.md` for accuracy
+   - Verify archetype classifications
+   - Review violation priorities
+
+4. **Start systematic migration**
+   ```
+   /ux-craft migrate-project
+   ```
+   Guides migration file by file, tracking progress.
+
+5. **Check migration status anytime**
+   ```
+   /ux-craft migration-status
+   ```
+
+**Key concept:** The taxonomy defines 6 page archetypes and dozens of element variants. Every page in your project maps to one archetype. Every UI element maps to a taxonomy element. The design system provides the tokens (colors, spacing, typography) that style everything consistently.
+
+---
+
 ## File Types
 
 | File | Static/Dynamic | Per-Project |
@@ -202,6 +242,25 @@ These are the ways I break. The framework guards against them.
 
 ---
 
+## Bug Fixing
+
+When asked to fix bugs from `.claude/docs/bugs/bugs.md`:
+
+1. **Read** the bugs file
+2. **Find** bugs without `**Sistemato:**` field (these are open)
+3. **Fix** each bug
+4. **Mark as done** by adding after the Screenshot field:
+   ```
+   **Sistemato:** completato [YYYY-MM-DD]
+   ```
+
+**Bug fixing prompt:**
+```
+Fix all open bugs in .claude/docs/bugs/bugs.md
+```
+
+---
+
 ## Quick Commands
 
 | I need to... | I do... |
@@ -215,6 +274,9 @@ These are the ways I break. The framework guards against them.
 | Verify before commit | Run through `.claude/docs/checklist.md` |
 | Start a large refactoring | Audit with grep → create migration tracker |
 | Find all instances in large file | `grep -n "pattern" file.tsx` |
+| Fix bugs | Read `.claude/docs/bugs/bugs.md` → fix → add `**Sistemato:**` |
+| Migrate existing UI to framework | `/ux-craft analyze-project` → `/ux-craft migrate-project` |
+| Check UI migration status | `/ux-craft migration-status` |
 
 ---
 
@@ -228,9 +290,18 @@ CLAUDE.md           # This file - my operating system
 │   ├── decisions.md    # Why things are the way they are
 │   ├── checklist.md    # Pre-commit verification
 │   ├── workflows.md    # Decision flowcharts (Mermaid)
-│   └── specs/          # Feature specifications
-│       └── [name].md
+│   ├── specs/          # Feature specifications
+│   │   └── [name].md
+│   └── bugs/           # Bug reports from testers
+│       ├── bugs.md         # All bugs in one file
+│       └── screenshots/    # Visual evidence
 └── skills/             # Specialized skills
+
+.ux-craft/              # UI/UX design system (created by ux-craft skill)
+├── system.md           # Design tokens
+├── project-map.md      # UI analysis and mapping
+├── compliance.md       # File compliance tracking
+└── migrations/         # Migration trackers
 ```
 
 ---

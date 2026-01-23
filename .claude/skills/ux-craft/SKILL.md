@@ -313,6 +313,90 @@ Generate a complete page template for a specific archetype:
 
 ---
 
+## Project Migration Commands
+
+Commands for adopting this framework on existing projects.
+
+### `/ux-craft analyze-project`
+
+Analyze an existing codebase and create a comprehensive UI map:
+
+1. **Scan routes/pages** - Find all page components
+2. **Classify archetypes** - Map each page to taxonomy archetypes (Entry, Discovery, Detail, Action, Management, System)
+3. **Inventory elements** - List all UI elements used per page
+4. **Check token usage** - Identify hardcoded values vs design system tokens
+5. **Generate project map** - Create `.ux-craft/project-map.md`
+
+**Output:** `.ux-craft/project-map.md` with:
+- Pages → Archetypes mapping
+- Pages → Elements mapping
+- Element inventory with compliance status
+- Token usage analysis
+- Violations summary
+- Migration priorities
+
+**Usage:**
+```
+/ux-craft analyze-project
+```
+
+**When to use:**
+- First time adopting this framework on an existing project
+- After major UI changes to update the map
+- Before planning a design system migration
+
+### `/ux-craft migrate-project`
+
+Systematic migration workflow for existing projects:
+
+1. **Check prerequisites:**
+   - `.ux-craft/system.md` exists (run `/ux-craft establish` if not)
+   - `.ux-craft/project-map.md` exists (run `/ux-craft analyze-project` if not)
+
+2. **Show migration overview:**
+   - Total files needing migration
+   - Violations by severity (Critical, High, Medium)
+   - Suggested migration order
+
+3. **Create migration plan:**
+   - `.ux-craft/migrations/project-migration.md` with:
+     - Prioritized file list
+     - Specific changes needed per file
+     - Progress tracking
+
+4. **Guide migration:**
+   - Work file by file
+   - For each file: read → identify violations → fix → verify → mark complete
+   - Update project-map.md as files become compliant
+
+**Usage:**
+```
+/ux-craft migrate-project
+```
+
+**Migration priority order:**
+1. **Foundation** - Typography, colors, spacing tokens
+2. **Global components** - Nav, footer, buttons (high reuse)
+3. **Critical paths** - Entry, Action pages (user-facing)
+4. **Secondary pages** - Discovery, Detail pages
+5. **Admin/internal** - Management pages (lower priority)
+
+### `/ux-craft migration-status`
+
+Quick status check on ongoing migration:
+
+1. Read `.ux-craft/project-map.md`
+2. Show compliance percentage
+3. List remaining violations by priority
+4. Suggest next files to tackle
+
+**Usage:**
+```
+/ux-craft migration-status
+```
+
+---
+
 ## Visual References System
 
 ### Purpose
@@ -424,14 +508,16 @@ Tracks in-progress pattern migrations. Created by `/ux-craft migrate`.
 
 ```
 .ux-craft/
-├── system.md           # Design tokens
-├── compliance.md       # File compliance status
-├── sitemap-mapping.md  # Route → archetype mapping
-├── migrations/         # Active migrations
-│   ├── transition-colors.md
+├── system.md              # Design tokens (created by /ux-craft establish)
+├── project-map.md         # Full UI analysis (created by /ux-craft analyze-project)
+├── compliance.md          # File compliance status (created by /ux-craft compliance)
+├── sitemap-mapping.md     # Route → archetype mapping (created by /ux-craft map-sitemap)
+├── migrations/            # Active migrations
+│   ├── project-migration.md   # Full project migration tracker
+│   ├── transition-colors.md   # Pattern-specific migrations
 │   └── spacing-variables.md
-├── patterns/           # Extracted patterns
-└── test-pages/         # Static HTML test pages
+├── patterns/              # Extracted reusable patterns
+└── test-pages/            # Static HTML test pages
     ├── index.html
     ├── tokens.css
     ├── entry.html
@@ -504,6 +590,7 @@ UI elements: 3:1 minimum
 - **Visual References**: [references.md](references.md)
 - **Page Taxonomy**: [taxonomy/pages.md](taxonomy/pages.md)
 - **Element Taxonomy**: [taxonomy/elements.md](taxonomy/elements.md)
+- **Project Map Template**: [templates/project-map-template.md](templates/project-map-template.md)
 
 ---
 
