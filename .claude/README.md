@@ -14,6 +14,7 @@ Due componenti che lavorano insieme:
    - **ux-craft** — UI/UX: design direction, accessibilità WCAG, tipografia
    - **dev-patterns** — Development: principi SOLID, API design, testing, security (agnostico + stack-specific)
    - **security-guardian** — Sicurezza AI-specific: OWASP, credential detection, BaaS audit
+   - **seo-geo-copy** — SEO tradizionale + GEO (AI search) + copywriting persuasivo
 
 Il framework definisce *come* Claude lavora. Le skill definiscono *cosa* sa fare in ambiti specifici.
 
@@ -35,8 +36,20 @@ progetto/
     └── skills/
         ├── ux-craft/         # Skill UI/UX
         │   ├── SKILL.md      # Definizione skill e comandi
-        │   ├── directions.md # 6 direzioni di design
-        │   ├── references.md # Guida al sistema visual references
+        │   ├── generation/   # Sistema generativo
+        │   │   ├── modes.md          # Safe/Chaos/Hybrid
+        │   │   ├── combination-logic.md
+        │   │   └── anti-patterns.md
+        │   ├── styles/       # Stili visivi
+        │   │   ├── index.md          # Overview 11 stili
+        │   │   ├── base/             # Flat, Material, Glass, etc.
+        │   │   └── modifiers/        # Grid, Curves, Palette, Density
+        │   ├── matrices/     # Profili fuzzy weights
+        │   │   ├── by-type.md        # 25 tipi progetto
+        │   │   ├── by-industry.md    # 40+ industrie
+        │   │   └── by-target/        # 7 dimensioni target
+        │   ├── factor-x/     # Controlled chaos
+        │   │   └── *.md              # Typography, Color, Layout, etc.
         │   ├── taxonomy/     # Tassonomia pagine ed elementi
         │   │   ├── pages.md
         │   │   └── elements.md
@@ -58,7 +71,18 @@ progetto/
         │   │   └── stack-template.md
         │   └── stacks/       # Pattern stack-specific (generati)
         │       └── typescript-react-nextjs/  # Esempio pre-generato
-        └── security-guardian/# Skill sicurezza AI-specific
+        ├── security-guardian/# Skill sicurezza AI-specific
+        └── seo-geo-copy/     # Skill SEO + GEO + Copywriting
+            ├── SKILL.md      # Definizione skill e comandi
+            ├── seo/          # Fondamenti SEO tradizionale
+            ├── geo/          # GEO per AI search
+            ├── copywriting/  # Framework persuasivi
+            ├── generation/   # Prompt operativi per generazione
+            ├── validation/   # 40 regole misurabili
+            ├── templates/    # Template contenuti + JSON-LD schemas
+            ├── checklists/   # Pre-publish e audit
+            ├── workflows/    # Flussi interattivi
+            └── reference/    # Contesto progetto (brand, products)
 ```
 
 ---
@@ -71,7 +95,38 @@ progetto/
    - `CLAUDE.md`
    - `.claude/` (intera cartella)
 
-2. Inizia a lavorare. Claude popolerà il registry man mano che sviluppa.
+2. **Configura le skill in base al tipo di progetto:**
+
+#### Progetto con UI (frontend o fullstack)
+
+```
+/ux-craft generate
+```
+Genera uno stile visivo. Poi:
+```
+/ux-craft establish
+```
+Crea il design system in `.ux-craft/system.md`. Poi:
+```
+/ux-craft preview
+```
+Genera preview HTML navigabile per validare visivamente il design system prima dell'implementazione.
+
+```
+/adapt-framework
+```
+Analizza lo stack e genera pattern di sviluppo specifici.
+
+#### Progetto backend-only
+
+```
+/adapt-framework
+```
+Analizza lo stack (Node, Python, Go, etc.) e genera pattern specifici.
+
+3. Inizia a lavorare. Claude popolerà il registry man mano che sviluppa.
+
+---
 
 ### Progetto esistente (con codice già scritto)
 
@@ -79,7 +134,7 @@ progetto/
    - `CLAUDE.md`
    - `.claude/` (intera cartella)
 
-2. **Obbligatorio:** Fai popolare il registry con questo prompt:
+2. **Obbligatorio:** Fai popolare il registry:
 
 ```
 Analizza questo codebase e popola .claude/docs/registry.md con:
@@ -91,21 +146,76 @@ Analizza questo codebase e popola .claude/docs/registry.md con:
 Salta le sezioni che non si applicano.
 ```
 
-3. **Se ci sono pattern architetturali già stabiliti**, documentali:
+3. **Obbligatorio:** Genera pattern per lo stack:
+
+```
+/adapt-framework
+```
+
+4. **Se ci sono pattern architetturali già stabiliti**, documentali:
 
 ```
 Analizza il codebase e identifica le convenzioni architetturali (patterns, naming, struttura).
 Aggiungi le decisioni rilevanti a .claude/docs/decisions.md.
 ```
 
-4. **Se il progetto ha check specifici** (linter, i18n, etc.), aggiungi a `.claude/docs/checklist.md`.
+5. **Consigliato:** Esegui un audit di sicurezza iniziale:
 
-### Cosa va popolato per-progetto
+```
+/security-guardian audit
+```
 
-| File | Popolamento | Quando |
-|------|-------------|--------|
+6. **Se il progetto ha check specifici** (linter, i18n, etc.), aggiungi a `.claude/docs/checklist.md`.
+
+---
+
+### Progetto esistente con UI
+
+Se il progetto ha già componenti UI, segui i passi sopra più:
+
+1. **Stabilisci il design system** (importa valori esistenti o creane uno nuovo):
+
+```
+/ux-craft establish
+```
+
+2. **Analizza lo stato attuale della UI:**
+
+```
+/ux-craft analyze-project
+```
+Crea `.ux-craft/project-map.md` con:
+- Pagine mappate agli archetipi (Entry, Discovery, Detail, Action, Management, System)
+- Inventario elementi per pagina
+- Stato compliance design system
+- Violazioni e priorità migrazione
+
+3. **Revisiona il project map** in `.ux-craft/project-map.md`:
+- Verifica che le classificazioni siano corrette
+- Controlla le priorità delle violazioni
+
+4. **Avvia la migrazione sistematica:**
+
+```
+/ux-craft migrate-project
+```
+
+5. **Controlla lo stato migrazione in qualsiasi momento:**
+
+```
+/ux-craft migration-status
+```
+
+### Cosa va popolato/configurato per-progetto
+
+| File/Comando | Tipo | Quando |
+|--------------|------|--------|
 | `registry.md` | **Obbligatorio** | Subito dopo aver copiato il framework |
+| `/adapt-framework` | **Obbligatorio** | Genera pattern per lo stack del progetto |
 | `decisions.md` | Consigliato | Se ci sono pattern già stabiliti |
+| `/security-guardian audit` | Consigliato | Audit sicurezza iniziale su progetti esistenti |
+| `/ux-craft establish` | Consigliato | Per progetti con UI |
+| `/ux-craft analyze-project` | Consigliato | Per progetti esistenti con UI da migrare |
 | `checklist.md` | Opzionale | Se ci sono check specifici del progetto |
 | `workflows.md` | No | Diagrammi universali, non modificare |
 | `specs/*.md` | Automatico | Claude li crea durante lo sviluppo |
@@ -166,7 +276,8 @@ Si attiva automaticamente quando il contesto riguarda UI/UX, oppure manualmente:
 
 | Comando | Cosa fa |
 |---------|---------|
-| `/ux-craft establish` | Crea un design system (con fallback intelligente se nessuna reference) |
+| `/ux-craft generate` | **Nuovo:** Genera stile visivo con sistema fuzzy weights (safe/chaos/hybrid) |
+| `/ux-craft establish` | Crea system.md dal risultato di generate |
 | `/ux-craft apply` | Applica il design system durante la generazione |
 | `/ux-craft audit` | Verifica accessibilità e coerenza |
 | `/ux-craft research [topic]` | Ricerca prima di progettare |
@@ -175,15 +286,23 @@ Si attiva automaticamente quando il contesto riguarda UI/UX, oppure manualmente:
 | `/ux-craft reference [pattern]` | Consulta riferimenti visivi curati |
 | `/ux-craft compliance` | Audit compliance design system su tutto il codebase |
 | `/ux-craft migrate [pattern]` | Migrazione sistematica di un pattern |
+| `/ux-craft preview` | Genera preview HTML navigabile del design system per validazione visiva |
 | `/ux-craft test-system` | Genera pagine HTML statiche per testare il design system |
 | `/ux-craft map-sitemap` | Mappa route progetto → archetipi pagina |
 | `/ux-craft archetype [type]` | Genera template completo per un archetipo |
 
+**Generative System:** La skill include un sistema di generazione stili basato su:
+- **Matrici fuzzy weights** — Profili per tipo (25), industria (40+), target (7 dimensioni)
+- **11 stili base** — Flat, Material, Neumorphism, Glassmorphism, Brutalism, Claymorphism, Skeuomorphism, Y2K, Gen-Z, Bento, Spatial
+- **4 modificatori** — Grid (Swiss/Bento/Broken), Curves, Palette, Density
+- **Factor X** — "Breakers" per evitare output generici (Typography Clash, Color Intrusion, etc.)
+- **3 modi** — Safe (prevedibile), Chaos (random), Hybrid (matrici + Factor X)
+
 **Page Taxonomy System:** La skill include una tassonomia di 6 archetipi pagina (Entry, Discovery, Detail, Action, Management, System). Ogni archetipo definisce layout patterns, component slots, content patterns e interaction flows. Usa `/ux-craft map-sitemap` per mappare le route del tuo progetto agli archetipi.
 
-**Design System Testing:** Prima di adottare un design system, usa `/ux-craft test-system` per generare pagine HTML statiche di test in `.ux-craft/test-pages/`. Questo permette di validare visivamente il sistema prima dell'integrazione.
+**Design System Preview:** Prima di adottare un design system, usa `/ux-craft preview` per generare una preview HTML navigabile in `.ux-craft/preview/`. Include dashboard completa con tutti i token, componenti con tutti gli stati, theme toggle, e pagine esempio per ogni archetipo. L'utente può validare visivamente il design system nel browser prima di procedere con l'implementazione.
 
-**Visual References System:** La skill include un sistema di riferimenti visivi per mantenere consistenza nel design. Aggiungi screenshot in `.claude/skills/ux-craft/references/` e mappali nei file taxonomy per far consultare a Claude esempi visivi curati invece di cercare online. Se la cartella references è vuota, `/ux-craft establish` decide autonomamente in base al tipo di progetto.
+**Visual References System:** La skill include un sistema di riferimenti visivi per mantenere consistenza nel design. Aggiungi screenshot in `.claude/skills/ux-craft/references/` e mappali nei file taxonomy per far consultare a Claude esempi visivi curati invece di cercare online.
 
 **Attivazione:** UI, UX, component, interface, design system, accessibility, WCAG, frontend styling
 
@@ -232,6 +351,34 @@ Analisi di sicurezza specifica per codice AI-generated. Rileva vulnerabilità ti
 - Rilevamento logic inversion
 
 **Attivazione:** Security review, code audit, credential check, configuration analysis
+
+#### SEO-GEO-Copy
+
+Skill per contenuti ottimizzati sia per search engine tradizionali (Google, Bing) che per AI search (ChatGPT, Claude, Perplexity).
+
+| Comando | Cosa fa |
+|---------|---------|
+| `/seo-geo-copy write [type]` | Genera contenuto dual-optimized (article, landing, product, faq) |
+| `/seo-geo-copy audit [url/content]` | Audit SEO + GEO + copywriting con score 0-100 |
+| `/seo-geo-copy schema [type]` | Genera JSON-LD (Article, FAQ, Product, HowTo, LocalBusiness, Person) |
+| `/seo-geo-copy pillar-cluster [topic]` | Progetta architettura topic cluster |
+| `/seo-geo-copy meta [content]` | Genera title tag, meta description, OG tags |
+| `/seo-geo-copy research [topic]` | Ricerca keyword + intent + competitor gaps |
+| `/seo-geo-copy optimize [file]` | Ottimizza contenuto esistente |
+
+**Sistema operativo:**
+- **40 regole di validazione** — Criteri misurabili per SEO (10), GEO (10), Copywriting (10), Schema (5), Technical (5)
+- **Generation prompts** — Template con domande intake, struttura output, checklist per ogni content type
+- **JSON-LD templates** — Schema pronti con placeholder syntax
+- **Reference system** — Cartella `reference/` per brand guidelines, contesto progetto, product sheets
+
+**GEO (Generative Engine Optimization):**
+- Answer-first structure per estrazione AI
+- Self-contained chunks per RAG retrieval
+- Entity clarity per knowledge graphs
+- Citation-worthiness per essere citati da LLM
+
+**Attivazione:** content creation, SEO, copywriting, landing page, article, blog post, product description
 
 ---
 

@@ -82,38 +82,149 @@ Apply obsessive visual refinement:
 
 ## Commands
 
+### `/ux-craft generate`
+
+Generate a distinctive visual style using the fuzzy weights system.
+
+**Modes:**
+
+| Mode | Risk | Output |
+|------|------|--------|
+| `safe` | Low | Predictable, uses matrices |
+| `chaos` | High | Random style combination |
+| `hybrid` | Medium | Matrices + Factor X twist |
+
+**Usage:**
+```
+/ux-craft generate
+```
+
+**Workflow:**
+
+1. **Collect inputs:**
+   - Project type (SaaS, E-commerce, Portfolio, etc.) → [matrices/by-type.md](matrices/by-type.md)
+   - Industry (Fintech, Healthcare, Creative, etc.) → [matrices/by-industry.md](matrices/by-industry.md)
+   - Target (optional, multi-dimensional) → [matrices/by-target/](matrices/by-target/)
+   - Generation mode (safe/chaos/hybrid)
+
+2. **Calculate combined weights:**
+   - Load profiles from matrices
+   - Apply [combination logic](generation/combination-logic.md)
+   - Detect tension points
+   - Resolve conflicts
+
+3. **Select style combination:**
+   - Primary style from [styles/base/](styles/base/)
+   - Modifiers from [styles/modifiers/](styles/modifiers/)
+   - Check against [anti-patterns](generation/anti-patterns.md)
+
+4. **Apply Factor X (hybrid mode only):**
+   - Select random factor from [factor-x/](factor-x/)
+   - Apply with appropriate intensity
+
+5. **Generate output:**
+   - CSS custom properties
+   - Style recommendations
+   - Component guidance
+   - Example code snippets
+
+**Example output:**
+```markdown
+## Generated Style Profile
+
+**Primary Style:** Glassmorphism
+**Grid:** Bento
+**Curves:** Organic
+**Palette:** Cold with warm intrusion
+**Density:** Balanced
+
+**Factor X:** Typography Clash (moderate)
+- Headlines: Playfair Display (serif)
+- Body: Inter (sans-serif)
+
+**CSS Tokens:**
+[Generated CSS custom properties]
+
+**Warnings:**
+- Glassmorphism requires backdrop-filter support
+- Ensure sufficient contrast on glass surfaces
+```
+
+See [generation/modes.md](generation/modes.md) for full documentation.
+
+---
+
 ### `/ux-craft establish`
 
-Creates `system.md` design system file with intelligent fallback:
+Creates `system.md` design system file:
 
-1. **Check references folder** (`.claude/skills/ux-craft/references/`)
-2. **If references exist:**
-   - Analyze visual patterns from screenshots
-   - Extract design direction from references
-   - Suggest direction based on analysis
-3. **If references empty:**
-   - Ask project type (SaaS, e-commerce, docs, dashboard, creative, etc.)
-   - Infer best design direction based on:
-     - Industry best practices
-     - Similar successful products
-     - Project type conventions
-   - Recommend direction with reasoning
-4. Ask for color foundation (warm/cool/neutral)
-5. Generate `system.md` with complete token system
-6. Store in `.ux-craft/system.md`
+1. **Check for generated style** - If `/ux-craft generate` was run, convert that output to system.md
+2. **If no generated style:**
+   - Run `/ux-craft generate` workflow first
+   - Collect type, industry, target inputs
+   - Generate style profile
+3. **Convert to system.md:**
+   - CSS custom properties from selected style
+   - Spacing scale from density modifier
+   - Typography from style + Factor X
+   - Color palette from palette modifier
+4. **Store in `.ux-craft/system.md`**
 
-**Project Type → Direction Mapping:**
+**Recommended workflow:**
+```
+/ux-craft generate  → Choose style
+/ux-craft establish → Create system.md from choice
+/ux-craft preview   → Generate HTML preview for review
+```
 
-| Project Type | Recommended Direction |
-|--------------|----------------------|
-| SaaS / B2B | Sophistication & Trust |
-| E-commerce | Warmth & Approachability |
-| Developer tools | Utility & Function |
-| Admin / Dashboard | Precision & Density |
-| Analytics / BI | Data & Analysis |
-| Creative / Portfolio | Expressive & Bold |
-| Documentation | Utility & Function |
-| Consumer app | Warmth & Approachability |
+### `/ux-craft preview`
+
+Generate static HTML pages to visualize the design system in a browser before implementation.
+
+1. **Check prerequisites:**
+   - `.ux-craft/system.md` must exist
+   - If missing → prompt to run `/ux-craft establish` first
+
+2. **Generate files:**
+   - `.ux-craft/preview/index.html` - Main design system dashboard
+   - `.ux-craft/preview/tokens.css` - CSS custom properties from system.md
+   - `.ux-craft/preview/preview.css` - Preview page styles
+   - `.ux-craft/preview/preview.js` - Interactivity (theme toggle, copy, etc.)
+   - `.ux-craft/preview/pages/*.html` - Complete archetype page examples
+
+3. **Dashboard sections:**
+   - **Overview** - Style name, modifiers, metadata
+   - **Colors** - Swatches with values, contrast checker
+   - **Typography** - Font families, type scale, weights
+   - **Spacing** - Visual scale representation
+   - **Shadows & Depth** - Elevation examples
+   - **Border Radius** - Radius scale
+   - **Motion** - Duration and easing demos
+   - **Components** - Buttons, inputs, cards, navigation, feedback, data display
+   - **Example Pages** - Links to full archetype pages
+
+4. **Features:**
+   - Theme toggle (light/dark mode)
+   - Copy to clipboard for values and code
+   - Smooth scroll navigation
+   - Active section highlighting
+   - Interactive component demos
+   - Responsive layout
+
+5. **Instructions to user:**
+   - Open `.ux-craft/preview/index.html` directly in browser
+   - Or serve locally: `python -m http.server 8080 -d .ux-craft/preview`
+
+**Output:** `.ux-craft/preview/` directory with all HTML/CSS/JS files
+
+**Usage:**
+```
+/ux-craft preview
+```
+
+**Why this matters:** Users can see and evaluate the design system visually before committing to implementation. Approving or requesting changes happens at this stage, not after code is written.
+
+See [templates/preview-spec.md](templates/preview-spec.md) for full specification.
 
 ### `/ux-craft apply`
 
@@ -517,15 +628,20 @@ Tracks in-progress pattern migrations. Created by `/ux-craft migrate`.
 │   ├── transition-colors.md   # Pattern-specific migrations
 │   └── spacing-variables.md
 ├── patterns/              # Extracted reusable patterns
-└── test-pages/            # Static HTML test pages
-    ├── index.html
-    ├── tokens.css
-    ├── entry.html
-    ├── discovery.html
-    ├── detail.html
-    ├── action.html
-    ├── management.html
-    └── system.html
+├── preview/               # Visual design system preview (created by /ux-craft preview)
+│   ├── index.html         # Main dashboard with all tokens & components
+│   ├── tokens.css         # CSS custom properties from system.md
+│   ├── preview.css        # Preview page styles
+│   ├── preview.js         # Interactivity (theme toggle, copy, etc.)
+│   └── pages/             # Complete archetype page examples
+│       ├── entry.html
+│       ├── discovery.html
+│       ├── detail.html
+│       ├── action.html
+│       ├── management.html
+│       └── system.html
+└── test-pages/            # Legacy: simple component test pages
+    └── ...
 ```
 
 ---
@@ -582,15 +698,26 @@ UI elements: 3:1 minimum
 
 ## Detailed Resources
 
-- **Design Directions**: [directions.md](directions.md)
+### Core Documentation
 - **Accessibility Checklist**: [accessibility.md](accessibility.md)
 - **Typography System**: [typography.md](typography.md)
 - **Validation Rules**: [validation.md](validation.md)
-- **Example Systems**: [examples/](examples/)
 - **Visual References**: [references.md](references.md)
 - **Page Taxonomy**: [taxonomy/pages.md](taxonomy/pages.md)
 - **Element Taxonomy**: [taxonomy/elements.md](taxonomy/elements.md)
 - **Project Map Template**: [templates/project-map-template.md](templates/project-map-template.md)
+
+### Generative System
+- **Generation Modes**: [generation/modes.md](generation/modes.md)
+- **Combination Logic**: [generation/combination-logic.md](generation/combination-logic.md)
+- **Anti-Patterns**: [generation/anti-patterns.md](generation/anti-patterns.md)
+- **Style Index**: [styles/index.md](styles/index.md)
+- **Base Styles**: [styles/base/](styles/base/)
+- **Style Modifiers**: [styles/modifiers/](styles/modifiers/)
+- **Type Profiles**: [matrices/by-type.md](matrices/by-type.md)
+- **Industry Profiles**: [matrices/by-industry.md](matrices/by-industry.md)
+- **Target Profiles**: [matrices/by-target/](matrices/by-target/)
+- **Factor X**: [factor-x/](factor-x/)
 
 ---
 
