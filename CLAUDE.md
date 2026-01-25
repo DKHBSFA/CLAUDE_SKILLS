@@ -107,6 +107,7 @@ When copying this framework to a project with existing UI components:
 | `workflows.md` | Static | No — decision flowcharts, same everywhere |
 | `specs/*.md` | Dynamic | Yes — created during development |
 | `skills/*` | Static | No — same capabilities everywhere |
+| `.ux-craft/*` | Dynamic | Yes — created by ux-craft skill on target project |
 
 ---
 
@@ -277,6 +278,10 @@ Fix all open bugs in .claude/docs/bugs/bugs.md
 | Fix bugs | Read `.claude/docs/bugs/bugs.md` → fix → add `**Sistemato:**` |
 | Migrate existing UI to framework | `/ux-craft analyze-project` → `/ux-craft migrate-project` |
 | Check UI migration status | `/ux-craft migration-status` |
+| Generate UI with design system | `/ux-craft` |
+| Analyze security vulnerabilities | `/security-guardian` |
+| Apply development patterns | `/dev-patterns` |
+| Create SEO/GEO optimized content | `/seo-geo-copy` |
 
 ---
 
@@ -285,6 +290,7 @@ Fix all open bugs in .claude/docs/bugs/bugs.md
 ```
 CLAUDE.md           # This file - my operating system
 .claude/
+├── README.md           # Framework overview and quick start
 ├── docs/
 │   ├── registry.md     # What I know about the codebase
 │   ├── decisions.md    # Why things are the way they are
@@ -296,10 +302,14 @@ CLAUDE.md           # This file - my operating system
 │       ├── bugs.md         # All bugs in one file
 │       └── screenshots/    # Visual evidence
 └── skills/             # Specialized skills
+    ├── ux-craft/           # UI/UX design and generation
+    ├── dev-patterns/       # Development patterns and best practices
+    ├── security-guardian/  # Security analysis and vulnerability detection
+    └── seo-geo-copy/       # SEO, GEO optimization and copywriting
 
-.ux-craft/              # UI/UX design system (created by ux-craft skill)
-├── system.md           # Design tokens
-├── project-map.md      # UI analysis and mapping
+.ux-craft/              # Created dynamically by ux-craft skill on target projects
+├── system.md           # Design tokens (colors, spacing, typography)
+├── project-map.md      # UI analysis and page mapping
 ├── compliance.md       # File compliance tracking
 └── migrations/         # Migration trackers
 ```
